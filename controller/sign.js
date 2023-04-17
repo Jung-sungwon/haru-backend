@@ -22,7 +22,7 @@ exports.signup = (req, res) => {
         html: `<b>  
     <h4>아래 링크를 클릭하여 10분내에 가입을 진행해주세요. </h4>
     <hr/>
-    <div>${process.env.FRONT_URL + "/user/active/" + token}</div>
+    <div>${process.env.DISTRIBUTION_URL + "/user/active/" + token}</div>
     </b>`,
       };
 
