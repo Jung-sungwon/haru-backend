@@ -85,13 +85,19 @@ exports.activeAccount = (req, res) => {
 
 exports.signin = (req, res) => {
   const data = req.body;
+
   const { email, password } = data;
   User.findOne({ email }).then((user) => {
     const { name, email, role } = user;
+
     let tok = jwt.sign({ email, name, role }, process.env.PRIVATE_KEY);
 
     if (user.checkPassword(password)) {
-      res.cookie("token", tok, { maxAge: 1000 * 60 * 60 * 24 * 7 });
+      res.cookie("token", tok, {
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        sameSite: "none",
+        secure: true,
+      });
       return res.status(200).json({ message: "로그인 되었습니다." });
     } else {
       return res.status(400).json({ message: "비밀번호가 틀렸습니다." });
@@ -114,8 +120,18 @@ exports.signcheck = (req, res) => {
 
 exports.logout = (req, res) => {
   const token = req.cookies.token;
-  res.clearCookie("token");
-  res.clearCookie("proCookie");
+
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+  res.clearCookie("proCookie", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+
   if (token) {
     return res.status(200).json({ message: "로그아웃 되었습니다." });
   } else {

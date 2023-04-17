@@ -112,7 +112,7 @@ exports.selectproject = (req, res) => {
     process.env.PRIVATE_KEY
   );
 
-  res.cookie("proCookie", proCookie);
+  res.cookie("proCookie", proCookie, { sameSite: "none", secure: true });
 
   return res.status(200).json({ message: `${title} 이 선택되었습니다.` });
 };
@@ -134,7 +134,11 @@ exports.userNameUpdate = (req, res) => {
         { email, name, role },
         process.env.PRIVATE_KEY
       );
-      res.cookie("token", updateToken, { maxAge: 1000 * 60 * 60 * 24 * 7 });
+      res.cookie("token", updateToken, {
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        sameSite: "none",
+        secure: true,
+      });
       return res.status(200).json({ message: "수정 완료" });
     })
     .catch((e) => {

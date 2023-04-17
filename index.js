@@ -12,7 +12,8 @@ require("dotenv").config();
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONT_URL, credentials: true }));
+
+app.use(cors({ origin: process.env.DISTRIBUTION_URL, credentials: true }));
 app.use("/api", api);
 app.use("/info", info);
 app.use("/crudRouter", crudrouter);
